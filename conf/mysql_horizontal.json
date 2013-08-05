@@ -3,7 +3,7 @@
         "player_assets" : "player_assets",
         "world_assets" : "world_assets"
     },
-    "cluster":[
+    "horizontal":[
         {
             "id":0,
             "master":"localhost:3306",

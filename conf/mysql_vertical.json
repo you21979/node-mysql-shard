@@ -1,7 +1,7 @@
 {
-    "manage":[
+    "vertical":[
         {
-            "database" : "shard_id",
+            "database" : "manage",
             "tables":[
                 "gen_player_seqid",
                 "gen_world_seqid"
