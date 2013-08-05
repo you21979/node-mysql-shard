@@ -11,9 +11,9 @@ PoolUtil.event.onConnect = function(conn, latency){
 
 var fs = require('fs');
 var cfgAuth = JSON.parse(fs.readFileSync("../conf/mysql_auth.json"));
-var cfgShard = JSON.parse(fs.readFileSync("../conf/mysql_shard.json"));
+var cfgShard = JSON.parse(fs.readFileSync("../conf/mysql_horizontal.json"));
 
-var cluster = MysqlShard.createCluster("hoge");
+var cluster = MysqlShard.createHorizontalPartition("hoge");
 
 var pool = 5;
 cluster.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgShard, function(){
