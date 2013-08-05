@@ -8,12 +8,8 @@
     "bignumber.js": "1.0.1"
   },
   "readmeFilename": "README.md",
-  "gitHead": "2ed8518bb119b611bc5f9cdb4d8488b320c0bd27",
   "description": "mysql shard",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
