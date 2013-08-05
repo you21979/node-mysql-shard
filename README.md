@@ -8,3 +8,7 @@ mysql sharding
 ```bash
 npm install mysql-shard
 ```
+
+## License
+
+MIT
