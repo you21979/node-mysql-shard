@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
-    "mysql": "2.0.0-alpha8"
+    "mysql": "2.0.0-alpha8",
+    "bignumber.js": "1.0.1"
   },
   "readmeFilename": "README.md",
   "gitHead": "2ed8518bb119b611bc5f9cdb4d8488b320c0bd27",
