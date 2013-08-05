@@ -1,0 +1,12 @@
+{
+  "author": {
+    "name": "Yuki Akiyama",
+    "email": "you2197901 [at] gmail.com"
+  },
+  "name": "mysql-shard",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "mysql": "2.0.0-alpha8"
+  }
+}
