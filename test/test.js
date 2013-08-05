@@ -10,12 +10,13 @@ PoolUtil.event.onConnect = function(conn, latency){
 }
 
 var fs = require('fs');
-var cfg = JSON.parse(fs.readFileSync("../conf/mysql.json"));
+var cfgAuth = JSON.parse(fs.readFileSync("../conf/mysql_auth.json"));
+var cfgShard = JSON.parse(fs.readFileSync("../conf/mysql_shard.json"));
 
 var cluster = MysqlShard.createCluster("hoge");
 
 var pool = 5;
-cluster.connect("root", "", pool, cfg, function(){
+cluster.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgShard, function(){
     console.log("ok");
     var db = cluster.select(1);
     var timeout = 1 * 1000;
