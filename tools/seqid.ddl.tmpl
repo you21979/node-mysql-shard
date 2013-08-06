@@ -1,0 +1,6 @@
+!!!DO NOT EXECUTE
+drop table if exists <TABLENAME>;
+create table <TABLENAME>(
+    id bigint unsigned not null default '0'
+) engine=MyISAM comment='seqid generator';
+insert into <TABLENAME> (id) values (0);
