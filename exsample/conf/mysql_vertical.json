@@ -1,0 +1,14 @@
+{
+    "vertical":[
+        {
+            "database" : "shard_manage",
+            "tables":[
+                "users_id"
+            ],
+            "master":"localhost:3306",
+            "slaves":[
+                "localhost:3306"
+            ]
+        }
+    ]
+}

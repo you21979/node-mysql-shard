@@ -1,0 +1,21 @@
+{
+    "database" : {
+        "shard" : "shard"
+    },
+    "horizontal":[
+        {
+            "id":0,
+            "master":"localhost:3306",
+            "slaves":[
+                "localhost:3306"
+            ]
+        },
+        {
+            "id":1,
+            "master":"localhost:3306",
+            "slaves":[
+                "localhost:3306"
+            ]
+        }
+    ]
+}
