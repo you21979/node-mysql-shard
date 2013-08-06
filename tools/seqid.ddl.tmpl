@@ -3,4 +3,13 @@ drop table if exists <TABLENAME>;
 create table <TABLENAME>(
     id bigint unsigned not null default '0'
 ) engine=MyISAM comment='seqid generator';
-insert into <TABLENAME> (id) values (0);
+insert into <TABLENAME> (id) values (1);
+delimiter //
+DROP PROCEDURE if exists gen_<TABLENAME>//
+CREATE PROCEDURE gen_<TABLENAME>(IN count INT)
+BEGIN
+    UPDATE <TABLENAME> SET id = LAST_INSERT_ID(id)+count;
+    SELECT cast(LAST_INSERT_ID() as char) as id;
+END
+//
+delimiter ;
