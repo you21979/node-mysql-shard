@@ -17,3 +17,5 @@ exports.createVerticalPartition = function(name){
 exports.createGenId = function(vertical, tablename, _timeout, _reserve){
     return createGenId(vertical, tablename, _timeout, _reserve);
 }
+exports.XAQuery = require("./lib/xa_query");
+exports.XAManager = require("./lib/xa_manager");
