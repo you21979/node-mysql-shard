@@ -40,8 +40,7 @@ var async = require('async');
 var hoge1 = function(work){
 
     var id1 = 17269835;
-   // var id2 = 17269836;
-    var id2 = 17269835;
+    var id2 = 17269836;
 
     async.parallel([
         function (callback) {
@@ -63,12 +62,18 @@ var hoge1 = function(work){
 
             async.waterfall([
                 function(callback){
-                    tx.query(id1, "SELECT * FROM users where id=?;", [id1], function(err, rows){
+                    tx.query(id1, "SELECT *aa FROM users where id=?;", [id1], function(err, rows){
+                        if(err){
+                            return callback(err, null);
+                        }
                         callback(null, rows[0]);
                     });
                 },
                 function(val, callback){
                     tx.query(id2, "UPDATE users SET name = ? where id=?;", [val.name, id2], function(err, rows){
+                        if(err){
+                            return callback(err, null);
+                        }
                         callback(null);
                     });
                 }
