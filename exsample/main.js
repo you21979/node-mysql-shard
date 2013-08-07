@@ -40,24 +40,25 @@ var async = require('async');
 var hoge1 = function(work){
 
     var id1 = 17269835;
-    var id2 = 17269836;
+   // var id2 = 17269836;
+    var id2 = 17269835;
 
     async.parallel([
         function (callback) {
-            work.shard.select(id1).getMaster(10000, function(err, conn){
+            work.shard.select(id1).getMaster(TIMEOUT, function(err, conn){
                 callback(err, {id:id1, conn:conn});
             });
         },
         function (callback) {
-            work.shard.select(id2).getMaster(10000, function(err, conn){
+            work.shard.select(id2).getMaster(TIMEOUT, function(err, conn){
                 callback(err, {id:id2, conn:conn});
             });
         }
     ], function (err, results) {
         var xam = new MysqlShard.XAManager();
         xam
-        .add(results[0].id, results[0].conn)
-        .add(results[1].id, results[1].conn)
+        .add(results[0].id, new MysqlShard.XAQuery(results[0].conn, results[0].id.toString()))
+        .add(results[1].id, new MysqlShard.XAQuery(results[1].conn, results[1].id.toString()))
         .tx(function(tx){
 
             async.waterfall([
@@ -83,10 +84,10 @@ var hoge1 = function(work){
 
 var insert = function(work){
     work.gen_users_id(function(id){
-        work.shard.select(id).getMaster(10000, function(err, conn){
+        work.shard.select(id).getMaster(TIMEOUT, function(err, conn){
             var xam = new MysqlShard.XAManager();
             xam
-            .add(id, conn)
+            .add(id, new MysqlShard.XAQuery(conn, id.toString()))
             .tx(function(tx){
 
                 async.waterfall([
