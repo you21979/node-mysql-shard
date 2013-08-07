@@ -4,8 +4,9 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
-    "mysql": "2.0.0-alpha8",
-    "bignumber.js": "1.0.1"
+    "bignumber.js": "1.0.1",
+    "async": "0.2.9",
+    "mysql": "2.0.0-alpha8"
   },
   "readmeFilename": "README.md",
   "description": "mysql shard",

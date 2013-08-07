@@ -1,5 +1,5 @@
 var MysqlShard = require("../");
-var asyncTask = require("../lib/async_task_complete.js");
+var asyncTask = require("../lib/async_task_complete");
 
 var fs = require('fs');
 
@@ -31,21 +31,52 @@ var main = function(){
     });
     work.shard.on("error",function(e){console.log(e);});
     task.join(function(){
-        hoge(work);
-
-/*
         insert(work);
-        insert(work);
-        select(work);
-*/
+        hoge1(work);
     });
 }
-var hoge = function(work){
-    work.shard.forEach(function(s){
-        s.getSlave(function(err, conn){
-            conn.query("select * from users;", [], function(err, row){
-                console.log(row);
+
+var async = require('async');
+var hoge1 = function(work){
+
+    var id1 = 17269835;
+    var id2 = 17269836;
+
+    async.parallel([
+        function (callback) {
+            work.shard.select(id1).getMaster(10000, function(err, conn){
+                callback(err, {id:id1, conn:conn});
             });
+        },
+        function (callback) {
+            work.shard.select(id2).getMaster(10000, function(err, conn){
+                callback(err, {id:id2, conn:conn});
+            });
+        }
+    ], function (err, results) {
+        var xam = new MysqlShard.XAManager();
+        xam
+        .add(results[0].id, results[0].conn)
+        .add(results[1].id, results[1].conn)
+        .tx(function(tx){
+
+            async.waterfall([
+                function(callback){
+                    tx.query(id1, "SELECT * FROM users where id=?;", [id1], function(err, rows){
+                        callback(null, rows[0]);
+                    });
+                },
+                function(val, callback){
+                    tx.query(id2, "UPDATE users SET name = ? where id=?;", [val.name, id2], function(err, rows){
+                        callback(null);
+                    });
+                }
+            ], function (err, result) {
+                tx.quit(err);
+            });
+
+        }).result(function(err, res){
+            console.log("OK");
         });
     });
 }
@@ -53,19 +84,23 @@ var hoge = function(work){
 var insert = function(work){
     work.gen_users_id(function(id){
         work.shard.select(id).getMaster(10000, function(err, conn){
-            conn.query("begin");
-            conn.query("insert into users(id,name) values(?,?);",[id,"hoge"]);
-            conn.query("commit");
-            conn.quit();
-        });
-    });
-}
+            var xam = new MysqlShard.XAManager();
+            xam
+            .add(id, conn)
+            .tx(function(tx){
 
-var select = function(work){
-    work.shard.forEach(function(s){
-        s.getSlave(function(err, conn){
-            conn.query("select * from users;", [], function(err, row){
-                console.log(row);
+                async.waterfall([
+                    function(callback){
+                        tx.query(id, "insert into users(id,name) values(?,?);",[id,"hoge"], function(err, rows){
+                            callback(err);
+                        });
+                    }
+                ], function (err, result) {
+                    tx.quit(err);
+                });
+
+            }).result(function(err, res){
+                console.log("OK");
             });
         });
     });
