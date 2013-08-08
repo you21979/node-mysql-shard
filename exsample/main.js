@@ -1,5 +1,4 @@
 var MysqlShard = require("../");
-var asyncTask = require("../lib/async_task_complete");
 
 var fs = require('fs');
 
@@ -16,21 +15,24 @@ var main = function(){
     work.shard = MysqlShard.createHorizontalPartition("shard");
     work.gen_users_id = MysqlShard.createGenId(work.manage, "users_id");
 
-    var task = asyncTask();
-    var pool = 2;
-    task.enter();
-    work.manage.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgVertical, function(){
-        console.log("manage connect ok");
-        task.leave();
-    });
     work.manage.on("error",function(e){console.log(e);throw new Error("");});
-    task.enter();
-    work.shard.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgHorizontal, function(){
-        console.log("shard connect ok");
-        task.leave();
-    });
     work.shard.on("error",function(e){console.log(e);});
-    task.join(function(){
+
+    var pool = 2;
+    async.parallel([
+        function (next) {
+            work.manage.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgVertical, function(){
+                console.log("manage connect ok");
+                next(null, null);
+            });
+        },
+        function (next) {
+            work.shard.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgHorizontal, function(){
+                console.log("shard connect ok");
+                next(null, null);
+            });
+        }
+    ], function (err, results) {
         insert(work);
         hoge1(work);
     });
@@ -43,14 +45,14 @@ var hoge1 = function(work){
     var id2 = 17269836;
 
     async.parallel([
-        function (callback) {
+        function (next) {
             work.shard.select(id1).getMaster(TIMEOUT, function(err, conn){
-                callback(err, {id:id1, conn:conn});
+                next(err, {id:id1, conn:conn});
             });
         },
-        function (callback) {
+        function (next) {
             work.shard.select(id2).getMaster(TIMEOUT, function(err, conn){
-                callback(err, {id:id2, conn:conn});
+                next(err, {id:id2, conn:conn});
             });
         }
     ], function (err, results) {
@@ -61,20 +63,20 @@ var hoge1 = function(work){
         .tx(function(tx){
 
             async.waterfall([
-                function(callback){
+                function(next){
                     tx.query(id1, "SELECT *aa FROM users where id=?;", [id1], function(err, rows){
                         if(err){
-                            return callback(err, null);
+                            return next(err, null);
                         }
-                        callback(null, rows[0]);
+                        next(null, rows[0]);
                     });
                 },
-                function(val, callback){
+                function(val, next){
                     tx.query(id2, "UPDATE users SET name = ? where id=?;", [val.name, id2], function(err, rows){
                         if(err){
-                            return callback(err, null);
+                            return next(err, null);
                         }
-                        callback(null);
+                        next(null);
                     });
                 }
             ], function (err, result) {
@@ -96,9 +98,9 @@ var insert = function(work){
             .tx(function(tx){
 
                 async.waterfall([
-                    function(callback){
+                    function(next){
                         tx.query(id, "insert into users(id,name) values(?,?);",[id,"hoge"], function(err, rows){
-                            callback(err);
+                            next(err);
                         });
                     }
                 ], function (err, result) {
