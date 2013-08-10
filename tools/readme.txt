@@ -1,6 +1,6 @@
 what is genseqid.js:
  generate of seq table
-exsample:
+example:
  $ node ./genseqid.js shard_seq_tbl | mysql -uroot -p shard_manage
 
 sql:
