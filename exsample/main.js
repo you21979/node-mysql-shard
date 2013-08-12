@@ -21,18 +21,19 @@ var main = function(){
     var pool = 2;
     async.parallel([
         function (next) {
-            work.manage.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgVertical, function(){
+            work.manage.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgVertical, function(err){
                 console.log("manage connect ok");
-                next(null, null);
+                next(err, null);
             });
         },
         function (next) {
-            work.shard.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgHorizontal, function(){
+            work.shard.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgHorizontal, function(err){
                 console.log("shard connect ok");
-                next(null, null);
+                next(err, null);
             });
         }
     ], function (err, results) {
+        if(err) throw err;
         insert(work);
         hoge1(work);
     });
