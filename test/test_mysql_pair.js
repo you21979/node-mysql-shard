@@ -12,17 +12,17 @@ var mysqlConfig = {
     port : 3306,
     debug : false,
 };
-var x = new MysqlPair();
-x.connect(mysqlConfig, [mysqlConfig,mysqlConfig], function(){
-    console.log("ok");
-
-    x.getMaster(1 * 1000, function(e,c){
-        c.quit();
+var p = new MysqlPair();
+p.connect(mysqlConfig, [mysqlConfig,mysqlConfig], function(){
+    p.getMaster(1 * 1000, function(err,conn){
+        if(err) throw err;
+        conn.quit();
     });
 
-    x.getSlave(function(e,c){
-        c.query("show status;",function(ee,rr){
-            x.close();
+    p.getSlave(function(err,conn){
+        if(err) throw err;
+        conn.query("show status;",function(err,res){
+            p.close();
         });
     });
 });
