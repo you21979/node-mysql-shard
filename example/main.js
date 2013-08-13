@@ -35,12 +35,14 @@ var main = function(){
     ], function (err, results) {
         if(err) throw err;
         //insert(work);
-        hoge1(work);
+        hoge1(work, function(err, res){
+            console.log(err);
+        });
     });
 }
 
 var async = require('async');
-var hoge1 = function(work){
+var hoge1 = function(work, callback){
 
     var id1 = 17269835;
     var id2 = 17269836;
@@ -57,6 +59,8 @@ var hoge1 = function(work){
             });
         }
     ], function (err, results) {
+        if(err) return callback(err, results);
+
         MysqlShard.createXAManager()
         .add(results[0].id, MysqlShard.createXAQuery(results[0].conn, results[0].id.toString()))
         .add(results[1].id, MysqlShard.createXAQuery(results[1].conn, results[1].id.toString()))
@@ -87,6 +91,7 @@ var hoge1 = function(work){
             //if(err)throw err;
             if(err) console.log("NG");
             else console.log("OK");
+            callback(err, res);
         });
     });
 }
