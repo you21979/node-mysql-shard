@@ -2,7 +2,7 @@ var MysqlShard = require("../");
 
 var fs = require('fs');
 
-var TIMEOUT = 10000;
+var TIMEOUT = 10;
 
 var main = function(){
     MysqlShard.initialize(2000);
