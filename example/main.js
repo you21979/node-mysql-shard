@@ -15,8 +15,8 @@ var main = function(){
     work.shard = MysqlShard.createHorizontalPartition("shard");
     work.gen_users_id = MysqlShard.createGenId(work.manage, "users_id");
 
-    work.manage.on("error",function(e){console.log(e);throw new Error("");});
-    work.shard.on("error",function(e){console.log(e);});
+//    work.manage.on("error",function(e){console.log(e);throw new Error("");});
+//    work.shard.on("error",function(e){});
 
     var pool = 2;
     async.parallel([
@@ -34,7 +34,7 @@ var main = function(){
         }
     ], function (err, results) {
         if(err) throw err;
-        insert(work);
+        //insert(work);
         hoge1(work);
     });
 }
@@ -65,7 +65,7 @@ var hoge1 = function(work){
 
             async.waterfall([
                 function(next){
-                    tx.query(id1, "SELECT *aa FROM users where id=?;", [id1], function(err, rows){
+                    tx.query(id1, "SELECT * FROM users where id=?;", [id1], function(err, rows){
                         if(err){
                             return next(err, null);
                         }
@@ -85,7 +85,9 @@ var hoge1 = function(work){
             });
 
         }).result(function(err, res){
-            console.log("OK");
+            //if(err)throw err;
+            if(err) console.log("NG");
+            else console.log("OK");
         });
     });
 }
