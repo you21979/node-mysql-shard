@@ -70,17 +70,27 @@ var hoge1 = function(work, callback){
                 function(next){
                     tx.query(id1, "SELECT * FROM users where id=?;", [id1], function(err, rows){
                         if(err){
-                            return next(err, null);
+                            return next(err, null, null);
                         }
-                        next(null, rows[0]);
+                        next(null, rows[0], null);
                     });
                 },
-                function(val, next){
-                    tx.query(id2, "UPDATE users SET name = ? where id=?;", [val.name, id2], function(err, rows){
+                function(val1, val2, next){
+                    tx.query(id2, "SELECT * FROM users where id=?;", [id2], function(err, rows){
                         if(err){
-                            return next(err, null);
+                            return next(err, null, null);
                         }
-                        next(null);
+                        next(null, val1, rows[0]);
+                    });
+                },
+                function(val1, val2, next){
+                    tx.query(id2, "UPDATE users SET name = ? where id=?;", [val1.name, id2], function(err, rows){
+                        next(err, val1, val2);
+                    });
+                },
+                function(val1, val2, next){
+                    tx.query(id1, "UPDATE users SET name = ? where id=?;", [val2.name, id1], function(err, rows){
+                        next(err, val1, val2);
                     });
                 }
             ], function (err, result) {
