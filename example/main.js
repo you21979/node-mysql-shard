@@ -57,10 +57,9 @@ var hoge1 = function(work){
             });
         }
     ], function (err, results) {
-        var xam = new MysqlShard.XAManager();
-        xam
-        .add(results[0].id, new MysqlShard.XAQuery(results[0].conn, results[0].id.toString()))
-        .add(results[1].id, new MysqlShard.XAQuery(results[1].conn, results[1].id.toString()))
+        MysqlShard.createXAManager()
+        .add(results[0].id, MysqlShard.createXAQuery(results[0].conn, results[0].id.toString()))
+        .add(results[1].id, MysqlShard.createXAQuery(results[1].conn, results[1].id.toString()))
         .tx(function(tx){
 
             async.waterfall([
@@ -95,9 +94,8 @@ var hoge1 = function(work){
 var insert = function(work){
     work.gen_users_id(function(id){
         work.shard.select(id).getMaster(TIMEOUT, function(err, conn){
-            var xam = new MysqlShard.XAManager();
-            xam
-            .add(id, new MysqlShard.XAQuery(conn, id.toString()))
+            MysqlShard.createXAManager()
+            .add(id, MysqlShard.createXAQuery(conn, id.toString()))
             .tx(function(tx){
 
                 async.waterfall([
