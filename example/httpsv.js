@@ -20,7 +20,7 @@ var server = http.createServer(function(req, res) {
 });
 var work = {};
 
-var TIMEOUT = 1000;
+var TIMEOUT = 10000;
 
 var q = function(callback){
     var id1 = 17269835;
@@ -75,7 +75,7 @@ var main = function(){
     work.shard = MysqlShard.createHorizontalPartition("shard");
     work.gen_users_id = MysqlShard.createGenId(work.manage, "users_id");
 
-    var pool = 2;
+    var pool = 20;
     async.parallel([
         function (next) {
             server.listen(PORT, function(err) {

@@ -1,7 +1,7 @@
 {
   "author": "Yuki Akiyama <you2197901 [at] gmail.com>",
   "name": "mysql-shard",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "dependencies": {
     "bignumber.js": "1.0.1",
