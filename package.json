@@ -1,7 +1,7 @@
 {
   "author": "Yuki Akiyama <you2197901 [at] gmail.com>",
   "name": "mysql-shard",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "dependencies": {
     "bignumber.js": "1.0.1",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/you21979/node_mysql_shard.git"
+    "url": "git://github.com/you21979/node-mysql-shard.git"
   },
   "keywords": [
     "sharding",
@@ -25,6 +25,6 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/you21979/node_mysql_shard/issues"
+    "url": "https://github.com/you21979/node-mysql-shard/issues"
   }
 }
