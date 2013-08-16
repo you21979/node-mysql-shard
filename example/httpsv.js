@@ -80,12 +80,6 @@ var main = function(){
     var pool = 20;
     async.parallel([
         function (next) {
-            server.listen(PORT, function(err) {
-                console.log('Listening on ' + PORT);
-                next(err, null);
-            });
-        },
-        function (next) {
             work.manage.connect(cfgAuth.auth.user, cfgAuth.auth.password, pool, cfgVertical, function(err){
                 console.log("manage connect ok");
                 next(err, null);
@@ -99,6 +93,10 @@ var main = function(){
         }
     ], function (err, results) {
         if(err) throw err;
+
+        server.listen(PORT, function(err) {
+            console.log('Listening on ' + PORT);
+        });
     });
 }
 
