@@ -5,14 +5,16 @@ var fs = require('fs');
 
 var PORT = 8080;
 
-var index = "";
 var server = http.createServer(function(req, res) {
   if (req.url === '/') {
-    q(function(){
+    q(function(err,result){
+        var index = "";
+        if(err) index = "NG";
+        else index = "OK";
+        res.writeHead(200, {'content-type': 'text/html',
+                    'content-length': Buffer.byteLength(index)});
+        res.end(index);
     });
-    res.writeHead(200, {'content-type': 'text/html',
-                'content-length': Buffer.byteLength(index)});
-    res.end(index);
   } else {
     res.writeHead(404);
     res.end();
