@@ -6,6 +6,7 @@
   "dependencies": {
     "bignumber.js": "1.0.1",
     "async": "0.2.9",
+    "hashpjw": "0.0.x",
     "mysql": "2.0.0-alpha8"
   },
   "readmeFilename": "README.md",
